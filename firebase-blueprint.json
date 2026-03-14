@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and statistics",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "totalSolved": { "type": "integer" },
+            "currentStreak": { "type": "integer" },
+            "lastSolvedDate": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "required": ["email", "role"]
+    },
+    "Track": {
+      "title": "Track",
+      "description": "A learning track containing problems",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["name", "description"]
+    },
+    "Problem": {
+      "title": "Problem",
+      "description": "A competitive programming problem",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "platform": { "type": "string", "enum": ["Codeforces", "CodeChef", "Beecrowd", "AtCoder", "Toph"] },
+        "problem_link": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "track_id": { "type": "string" },
+        "day_number": { "type": "integer" },
+        "is_locked": { "type": "boolean" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["title", "platform", "problem_link", "track_id"]
+    },
+    "Tag": {
+      "title": "Tag",
+      "description": "Problem tags",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "User progress on a specific problem",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "problemId": { "type": "string" },
+        "status": { "type": "string", "enum": ["solved", "attempted", "not_started"] },
+        "notes": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "problemId", "status"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "tracks/{trackId}": {
+      "schema": "Track",
+      "description": "Learning tracks"
+    },
+    "problems/{problemId}": {
+      "schema": "Problem",
+      "description": "Problems curated for tracks"
+    },
+    "tags/{tagId}": {
+      "schema": "Tag",
+      "description": "Problem tags"
+    },
+    "user_progress/{progressId}": {
+      "schema": "UserProgress",
+      "description": "User problem progress records"
+    }
+  }
+}
